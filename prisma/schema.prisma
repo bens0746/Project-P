@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model ProductType {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  name       String?
+  createdAt  DateTime?  @default(now())
+  updatedAt  DateTime?  @updatedAt
+  deleted_at DateTime?  @map("deleted_at")
+  products   Products[]
+}
+
+model Products {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  image       String?
+  name        String?
+  price       Int?
+  type        String?       @db.ObjectId
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @updatedAt
+  deleted_at  DateTime?     @map("deleted_at")
+  OrderDetail OrderDetail[]
+  productType ProductType?  @relation(fields: [type], references: [id])
+}
+
+model Order {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  orderCode   String?
+  image       String?
+  address     String?
+  createdAt   DateTime?     @default(now())
+  deleted_at  DateTime?     @map("deleted_at")
+  district    String?
+  firstname   String?
+  lastname    String?
+  postalCode  String?
+  province    String?
+  updatedAt   DateTime?     @updatedAt
+  status      String?
+  tel         String?
+  total       Int?
+  email       String?
+  subDistrict String?
+  notes       String?
+  OrderDetail OrderDetail[]
+}
+
+model OrderDetail {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  sumPrice  Int?
+  sumQty    Int?
+  productId String?   @db.ObjectId
+  orderId   String?   @db.ObjectId
+  order     Order?    @relation(fields: [orderId], references: [id])
+  products  Products? @relation(fields: [productId], references: [id])
+}
+
+model Contact {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  image      String?
+  linkQrLine String?
+  title      String?
+  address    String?
+  tel        String?
+  email      String?
+  opentime   String?
+  facebook   String?
+  line       String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+  linkmap    String?
+}
+
+model HomeFront {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  image      String?
+  name       String?
+  subname     String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+}
+
+model Slides {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  image      String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+}
+
+model HowToOrder {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  image      String?
+  title      String?
+  detail     String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+}
+
+model LinkVideo {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  link       String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+}
+
+model Popup {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  image      String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+}
+
+model Users {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  image       String?
+  fname       String?
+  lname       String?
+  username    String?
+  passwaord   String?
+  usersTypeId String?    @db.ObjectId
+  createdAt   DateTime?  @default(now())
+  updatedAt   DateTime?  @updatedAt
+  deleted_at  DateTime?  @map("deleted_at")
+  UsersType   UsersType? @relation(fields: [usersTypeId], references: [id])
+}
+
+model UsersType {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String?
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  deleted_at DateTime? @map("deleted_at")
+  users      Users[]
+}
